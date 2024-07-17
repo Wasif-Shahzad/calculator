@@ -10,10 +10,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _myController = TextEditingController();
 
-  void updateController(String toBeAdded) =>
-    _myController.text += toBeAdded;
+  void updateController(String toBeAdded) => _myController.text += toBeAdded;
 
-  void backspace(){
+  void backspace() {
     String previous = _myController.text;
     String afterBackspace = '';
     try {
@@ -32,7 +31,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             SizedBox(
-              width: 300, 
+              width: 300,
               height: 125,
               child: Align(
                 alignment: Alignment.bottomRight,
@@ -67,60 +66,27 @@ class _HomePageState extends State<HomePage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                GestureDetector(
-                  onTap: () => updateController('9'),
-                  child: Container(
-                    width: 75, 
-                    height: 75,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color.fromARGB(255, 71, 71, 71),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        '9',
-                        style: TextStyle(
-                          fontSize: 32,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  )
-                ),
-                const SizedBox(width: 5),
-                GestureDetector(
+                Button(
+                  displayText: '5',
                   onTap: () => updateController('5'),
-                  child: Container(
-                    width: 75, 
-                    height: 75,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color.fromARGB(255, 71, 71, 71),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        '5',
-                        style: TextStyle(
-                          fontSize: 32,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-                  )
+                ),
+                const SizedBox(width: 5),
+                Button(
+                  displayText: '9',
+                  onTap: () => updateController('9'),
                 ),
                 const SizedBox(width: 5),
                 GestureDetector(
-                  onTap: () => backspace(),
-                  child: Container(
-                    width: 75, 
-                    height: 75,
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color.fromARGB(255, 71, 71, 71),
-                    ),
-                    child: const Icon(Icons.backspace),
-                  )
-                ),
+                    onTap: () => backspace(),
+                    child: Container(
+                      width: 75,
+                      height: 75,
+                      decoration: const BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Color.fromARGB(255, 71, 71, 71),
+                      ),
+                      child: const Icon(Icons.backspace),
+                    )),
               ],
             ),
             const SizedBox(height: 20),
@@ -129,5 +95,38 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+}
+
+class Button extends StatelessWidget {
+  final String displayText;
+  final Function onTap;
+  const Button({
+    super.key,
+    required this.displayText,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+        onTap: () => onTap(),
+        child: Container(
+          width: 75,
+          height: 75,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: Color.fromARGB(255, 71, 71, 71),
+          ),
+          child: Center(
+            child: Text(
+              displayText,
+              style: const TextStyle(
+                fontSize: 32,
+                color: Colors.white,
+              ),
+            ),
+          ),
+        ));
   }
 }
