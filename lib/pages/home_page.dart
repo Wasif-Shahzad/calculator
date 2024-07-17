@@ -9,18 +9,41 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final _myController = TextEditingController();
+  final backendController = TextEditingController();
 
-  void updateController(String toBeAdded) => _myController.text += toBeAdded;
+  void updateController(String toBeAdded) {
+    _myController.text += toBeAdded;
+    switch (toBeAdded) {
+      case '÷':
+        backendController.text += '/';
+      case '×':
+        backendController.text += '*';
+      default:
+        backendController.text += toBeAdded;
+    }
+  }
 
   void backspace() {
     String previous = _myController.text;
     String afterBackspace = '';
+    String backendAfterBackspace = '';
     try {
+      backendAfterBackspace = previous.substring(0, previous.length - 1);
       afterBackspace = previous.substring(0, previous.length - 1);
     } on RangeError {
       return;
     }
     _myController.text = afterBackspace;
+    backendController.text = backendAfterBackspace;
+  }
+
+  void clearController() {
+    _myController.clear();
+    backendController.clear();
+  }
+
+  void giveAnswer() {
+    
   }
 
   @override
@@ -29,6 +52,7 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.black,
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SizedBox(
               width: 300,
@@ -67,13 +91,21 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Button(
-                  displayText: '5',
-                  onTap: () => updateController('5'),
+                  displayText: 'AC',
+                  onTap: () => clearController(),
+                  backgroundColor: Colors.orange.shade400,
                 ),
                 const SizedBox(width: 5),
                 Button(
-                  displayText: '9',
-                  onTap: () => updateController('9'),
+                  displayText: '(',
+                  onTap: () => updateController('('),
+                  backgroundColor: const Color.fromARGB(255, 71, 71, 71),
+                ),
+                const SizedBox(width: 5),
+                Button(
+                  displayText: ')',
+                  onTap: () => updateController(')'),
+                  backgroundColor: const Color.fromARGB(255, 71, 71, 71),
                 ),
                 const SizedBox(width: 5),
                 GestureDetector(
@@ -89,8 +121,146 @@ class _HomePageState extends State<HomePage> {
                     )),
               ],
             ),
-            const SizedBox(height: 20),
-            Text('hello'),
+            const SizedBox(height: 5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Button(
+                  displayText: '7',
+                  onTap: () => updateController('7'),
+                  backgroundColor: const Color.fromARGB(255, 71, 71, 71),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Button(
+                  displayText: '8',
+                  onTap: () => updateController('8'),
+                  backgroundColor: const Color.fromARGB(255, 71, 71, 71),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Button(
+                  displayText: '9',
+                  onTap: () => updateController('9'),
+                  backgroundColor: const Color.fromARGB(255, 71, 71, 71),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Button(
+                  displayText: '÷',
+                  onTap: () => updateController('÷'),
+                  backgroundColor: Colors.orange.shade400,
+                ),
+              ],
+            ),
+            const SizedBox(height: 5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Button(
+                  displayText: '4',
+                  onTap: () => updateController('4'),
+                  backgroundColor: const Color.fromARGB(255, 71, 71, 71),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Button(
+                  displayText: '5',
+                  onTap: () => updateController('5'),
+                  backgroundColor: const Color.fromARGB(255, 71, 71, 71),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Button(
+                  displayText: '6',
+                  onTap: () => updateController('6'),
+                  backgroundColor: const Color.fromARGB(255, 71, 71, 71),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Button(
+                  displayText: '×',
+                  onTap: () => updateController('×'),
+                  backgroundColor: Colors.orange.shade400,
+                ),
+              ],
+            ),
+            const SizedBox(height: 5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Button(
+                  displayText: '1',
+                  onTap: () => updateController('1'),
+                  backgroundColor: const Color.fromARGB(255, 71, 71, 71),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Button(
+                  displayText: '2',
+                  onTap: () => updateController('2'),
+                  backgroundColor: const Color.fromARGB(255, 71, 71, 71),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Button(
+                  displayText: '3',
+                  onTap: () => updateController('3'),
+                  backgroundColor: const Color.fromARGB(255, 71, 71, 71),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Button(
+                  displayText: '-',
+                  onTap: () => updateController('-'),
+                  backgroundColor: Colors.orange.shade400,
+                ),
+              ],
+            ),
+            const SizedBox(height: 5),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Button(
+                  displayText: '=',
+                  onTap: () => giveAnswer(),
+                  backgroundColor: Colors.orange.shade400,
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Button(
+                  displayText: '0',
+                  onTap: () => updateController('0'),
+                  backgroundColor: const Color.fromARGB(255, 71, 71, 71),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Button(
+                  displayText: '.',
+                  onTap: () => updateController('.'),
+                  backgroundColor: const Color.fromARGB(255, 71, 71, 71),
+                ),
+                const SizedBox(
+                  width: 5,
+                ),
+                Button(
+                  displayText: '+',
+                  onTap: () => updateController('+'),
+                  backgroundColor: Colors.orange.shade400,
+                ),
+              ],
+            )
           ],
         ),
       ),
@@ -101,10 +271,12 @@ class _HomePageState extends State<HomePage> {
 class Button extends StatelessWidget {
   final String displayText;
   final Function onTap;
+  final Color? backgroundColor;
   const Button({
     super.key,
     required this.displayText,
     required this.onTap,
+    required this.backgroundColor,
   });
 
   @override
@@ -114,15 +286,15 @@ class Button extends StatelessWidget {
         child: Container(
           width: 75,
           height: 75,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Color.fromARGB(255, 71, 71, 71),
+            color: backgroundColor,
           ),
           child: Center(
             child: Text(
               displayText,
               style: const TextStyle(
-                fontSize: 32,
+                fontSize: 28,
                 color: Colors.white,
               ),
             ),

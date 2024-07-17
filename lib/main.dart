@@ -12,6 +12,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+        /* color shceme:
+          digits: Color.fromARGB(255, 71, 71, 71)
+          ac: Color.fromARGB(255, 116, 116, 116),
+          symbols and equal: Colors.orange.shade400
+        */
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
