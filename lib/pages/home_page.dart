@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../util/stack.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -43,7 +44,10 @@ class _HomePageState extends State<HomePage> {
   }
 
   void giveAnswer() {
-    
+    var exp = ExpressionParser();
+    String result = exp.evaluateExpression(backendController.text);
+    _myController.text = result;
+    backendController.text = result;
   }
 
   @override
@@ -270,7 +274,7 @@ class _HomePageState extends State<HomePage> {
 
 class Button extends StatelessWidget {
   final String displayText;
-  final Function onTap;
+  final void Function() onTap;
   final Color? backgroundColor;
   const Button({
     super.key,
@@ -290,15 +294,116 @@ class Button extends StatelessWidget {
             shape: BoxShape.circle,
             color: backgroundColor,
           ),
+          alignment: Alignment.center,
           child: Center(
             child: Text(
               displayText,
               style: const TextStyle(
+                height: 0,
                 fontSize: 28,
                 color: Colors.white,
               ),
             ),
           ),
         ));
+  }
+}
+
+class ExpressionParser {
+  var st = DStack<double>();
+  var op = DStack<String>();
+
+  bool delim(String c) => c == ' ';
+
+  void processOperation(String op) {
+    double r = st.top();
+    st.pop();
+    double l = st.top();
+    st.pop();
+    switch (op) {
+      case '+':
+        st.push(l + r);
+        break;
+      case '-':
+        st.push(l - r);
+        break;
+      case '*':
+        st.push(l * r);
+        break;
+      case '/':
+        if (r == 0) {
+          throw ArgumentError("Division by zero");
+        }
+        st.push(l / r);
+        break;
+      default:
+        throw ArgumentError("Unknown operation: $op");
+    }
+  }
+
+  bool isOperation(String c) => c == '+' || c == '-' || c == '*' || c == '/';
+
+  int priority(String operation) {
+    if (operation == '+' || operation == '-') {
+      return 1;
+    } else if (operation == '*' || operation == '/') {
+      return 2;
+    }
+    return -1;
+  }
+
+  bool isDigit(String s) {
+    if (s.length != 1) {
+      return false;
+    }
+    final RegExp digitRegExp = RegExp(r'^\d$');
+    return digitRegExp.hasMatch(s);
+  }
+
+  String evaluateExpression(String expression) {
+    try {
+      for (int i = 0; i < expression.length; i++) {
+        if (delim(expression[i])) {
+          continue;
+        } else if (expression[i] == '(') {
+          op.push(expression[i]);
+        } else if (expression[i] == ')') {
+          while (op.top() != '(') {
+            processOperation(op.top());
+            op.pop();
+          }
+          op.pop();
+        } else if (isOperation(expression[i])) {
+          String curOperation = expression[i];
+          while (
+              !op.isEmpty() && priority(op.top()) >= priority(curOperation)) {
+            processOperation(op.top());
+            op.pop();
+          }
+          op.push(curOperation);
+        } else {
+          double number = 0;
+          while (i < expression.length && isDigit(expression[i])) {
+            number = number * 10 + int.parse(expression[i++]);
+          }
+          i--;
+          st.push(number);
+        }
+      }
+      while (!op.isEmpty()) {
+        processOperation(op.top());
+        op.pop();
+      }
+      if (st.isEmpty()) {
+        throw ArgumentError("Invalid expression: stack is empty");
+      }
+      double answer = st.top();
+      if (st.length() != 1) {
+        throw ArgumentError("Invalid expression: extra operands");
+      }
+      return answer.toString();
+    } catch (e) {
+      return "Error: ${e.toString()}";
+    }
   }
 }
