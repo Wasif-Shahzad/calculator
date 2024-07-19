@@ -86,6 +86,9 @@ class _HomePageState extends State<HomePage> {
                   alignment: Alignment.bottomRight,
                   child: TextField(
                     controller: _myController,
+                    onSubmitted: (value) {
+                      giveAnswer();
+                    },
                     textAlign: TextAlign.right,
                     style: const TextStyle(
                       fontSize: 25,

@@ -49,7 +49,7 @@ class SnackbarUtils {
         horizontal: 10,
       ),
       behavior: SnackBarBehavior.floating,
-      width: 400,
+      width: 450,
       duration: const Duration(seconds: 5),
       content: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
