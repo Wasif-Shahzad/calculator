@@ -1,6 +1,5 @@
 import 'package:calculator/util/expression_parser.dart';
 import 'package:flutter/material.dart';
-import '../util/stack.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});

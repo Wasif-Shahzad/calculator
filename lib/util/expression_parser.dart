@@ -109,7 +109,7 @@ class ExpressionParser {
       }
       return answer.toString();
     } catch (e) {
-      SnackbarUtils.showSnackbar(context, "Error: ${e.toString()}");
+      SnackbarUtils.showTrollSnackbar(context);
       return '';
     }
   }
