@@ -1,4 +1,6 @@
+import 'package:calculator/util/snackbar.dart';
 import 'package:calculator/util/stack.dart';
+import 'package:flutter/material.dart';
 
 class ExpressionParser {
   var st = DStack<double>();
@@ -6,7 +8,7 @@ class ExpressionParser {
 
   bool delim(String c) => c == ' ';
 
-  void processOperation(String op) {
+  void processOperation(BuildContext context, String op) {
     double r = st.top();
     st.pop();
     double l = st.top();
@@ -23,12 +25,12 @@ class ExpressionParser {
         break;
       case '/':
         if (r == 0) {
-          throw ArgumentError("Division by zero");
+          SnackbarUtils.showSnackbar(context, 'Divison by zero error');
         }
         st.push(l / r);
         break;
       default:
-        throw ArgumentError("Unknown operation: $op");
+        SnackbarUtils.showSnackbar(context, "Unknown operation: $op");
     }
   }
 
@@ -51,7 +53,7 @@ class ExpressionParser {
     return digitRegExp.hasMatch(s);
   }
 
-  String evaluateExpression(String expression) {
+  String evaluateExpression(BuildContext context, String expression) {
     try {
       for (int i = 0; i < expression.length; i++) {
         if (delim(expression[i])) {
@@ -60,7 +62,7 @@ class ExpressionParser {
           op.push(expression[i]);
         } else if (expression[i] == ')') {
           while (op.top() != '(') {
-            processOperation(op.top());
+            processOperation(context, op.top());
             op.pop();
           }
           op.pop();
@@ -68,7 +70,7 @@ class ExpressionParser {
           String curOperation = expression[i];
           while (
               !op.isEmpty() && priority(op.top()) >= priority(curOperation)) {
-            processOperation(op.top());
+            processOperation(context, op.top());
             op.pop();
           }
           op.push(curOperation);
@@ -93,19 +95,22 @@ class ExpressionParser {
         }
       }
       while (!op.isEmpty()) {
-        processOperation(op.top());
+        processOperation(context, op.top());
         op.pop();
       }
       if (st.isEmpty()) {
-        throw ArgumentError("Invalid expression: stack is empty");
+        SnackbarUtils.showSnackbar(
+            context, "Invalid expression: stack is empty");
       }
       double answer = st.top();
       if (st.length() != 1) {
-        throw ArgumentError("Invalid expression: extra operands");
+        SnackbarUtils.showSnackbar(
+            context, "Invalid expression: extra operands");
       }
       return answer.toString();
     } catch (e) {
-      return "Error: ${e.toString()}";
+      SnackbarUtils.showSnackbar(context, "Error: ${e.toString()}");
+      return '';
     }
   }
 }
